@@ -572,6 +572,9 @@ You can inspect these generated files to understand what went wrong. The compile
 </metadata>
 ```
 
+> [!TIP]
+> **Stuck on Metadata.xml?** Check `obj/Debug/net9.0-android/api.xml` — this is the raw API definition the binding generator produces from the Java bytecode. It shows the exact package names, class names, method signatures, and XPath paths you need to target in your `Metadata.xml`. If your XPath isn't matching, compare it against what's actually in `api.xml`.
+
 Here are the most common transformation patterns:
 
 #### Pattern 1: Removing Conflicting Repackaged Classes
