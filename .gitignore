@@ -1,0 +1,25 @@
+# Compiled files
+*.dll
+*.exe
+*.pdb
+bin/
+obj/
+
+# IDE
+.vs/
+.vscode/
+*.suo
+*.user
+*.sln.docstates
+
+# macOS
+.DS_Store
+
+# Build outputs
+build/
+*.xcarchive
+*.aar
+
+# NuGet
+packages/
+*.nupkg
