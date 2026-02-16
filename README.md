@@ -459,17 +459,6 @@ Library Output: build/outputs/aar/VendorModule-release.aar
 
 > **📦 Source:** [xamarin/XamarinComponents — AndroidGradleDependencyInfo.gradle](https://github.com/xamarin/XamarinComponents/blob/main/Util/AndroidGradleDependencyInfo.gradle)
 
-**Alternative approaches (if you don't have a Gradle project):**
-
-**Option B — Use `jadx` to decompile and inspect the AAR:**
-
-```bash
-brew install jadx
-jadx vendor-sdk.aar -d output/
-grep -r "^import " output/ | sort -u
-```
-
-**Option C — Check the POM file** if the SDK was distributed via Maven.
 
 **Map each dependency to its NuGet equivalent:**
 
