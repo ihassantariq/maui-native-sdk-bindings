@@ -503,7 +503,7 @@ grep -r "^import " output/ | sort -u
     
     <!-- Dependencies that don't have NuGet packages — include directly -->
     <AndroidAarLibrary Include="NativeLibs/logback-android-3.0.0.aar" />
-    <AndroidJavaLibrary Include="NativeLibs/fit-data-processing-2.7.jar" />
+    <AndroidJavaLibrary Include="NativeLibs/vendor-data-processing-2.7.jar" />
 </ItemGroup>
 ```
 
