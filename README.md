@@ -254,7 +254,7 @@ nm -gU build/WearableWrapper.xcframework/ios-arm64/WearableWrapper.framework/Wea
 
 ```bash
 sharpie bind \
-    -sdk iphoneos18.0 \
+    -sdk iphoneos26.1 \
     -output "./WearableWrapperApiDefinition" \
     -namespace "WearableWrapper" \
     -scope "build/WearableWrapper.xcframework/ios-arm64/WearableWrapper.framework/Headers/WearableWrapper-Swift.h" \
