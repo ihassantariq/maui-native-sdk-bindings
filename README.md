@@ -486,7 +486,38 @@ grep -r "^import " output/ | sort -u
 
 > **💡 Tip:** Search [NuGet.org](https://www.nuget.org/) for `Xamarin.AndroidX.*` or the library name. Most popular Android libraries have NuGet wrappers.
 
-Add them to the `.csproj`:
+**If a NuGet package exists** for the dependency, always prefer it — add it as a `<PackageReference>` in the binding project.
+
+**If no NuGet package exists**, you can use the AAR/JAR files directly from the `xamarin/` folder. However, there is a critical gotcha:
+
+> [!CAUTION]
+> **Do NOT add dependency AAR/JAR files to the binding project.** If you include a dependency AAR in your binding project alongside the vendor SDK AAR, the binding generator will try to generate C# bindings for **both** libraries. This creates a massive Metadata.xml headache — you'll be fixing hundreds of binding errors for libraries you don't even need to call from C#.
+
+**The correct approach:** Add dependency AAR/JAR files directly to the **.NET MAUI app project** (not the binding project). The binding project only needs the vendor SDK AAR — the one you actually want to bind. The dependency AARs just need to be present at build time for the linker to resolve references.
+
+```xml
+<!-- In your MAUI App .csproj (NOT the binding project) -->
+<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+    <!-- Reference the binding project -->
+    <ProjectReference Include="../AndroidVendorBindings/AndroidVendorBindings.csproj" />
+    
+    <!-- Dependencies that don't have NuGet packages — include directly -->
+    <AndroidAarLibrary Include="NativeLibs/logback-android-3.0.0.aar" />
+    <AndroidJavaLibrary Include="NativeLibs/fit-data-processing-2.7.jar" />
+</ItemGroup>
+```
+
+```xml
+<!-- In your Binding Project .csproj — ONLY the SDK you want to bind -->
+<ItemGroup>
+    <AndroidLibrary Include="Jars/vendor-sdk.aar" />
+    <!-- Do NOT add dependency AARs here! -->
+</ItemGroup>
+```
+
+> **💡 In short:** The binding project binds. The MAUI project references. Keep them separate.
+
+Add NuGet dependencies to the binding project `.csproj`:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -507,10 +538,9 @@ Add them to the `.csproj`:
         <!-- ... match ALL transitive dependencies -->
     </ItemGroup>
 
-    <!-- The vendor SDK AAR/JAR files -->
+    <!-- ONLY the vendor SDK you want to bind -->
     <ItemGroup>
         <AndroidLibrary Include="Jars/vendor-sdk.aar" />
-        <AndroidLibrary Include="Jars/data-processing.jar" />
     </ItemGroup>
 </Project>
 ```
