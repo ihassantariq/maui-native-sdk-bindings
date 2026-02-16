@@ -400,26 +400,76 @@ Copy the vendor AAR (and any companion JARs) into the `Jars/` folder and referen
 
 This is where most people get stuck. The AAR depends on other libraries at runtime, and you must provide them as **NuGet packages**. Missing even one will cause runtime crashes.
 
-**Option A — Use `jadx` to inspect the AAR:**
+**🔧 Recommended: Microsoft's Xamarin Gradle Dependency Tool**
+
+Microsoft provides an official Gradle script that **automatically finds all dependencies**, copies them to a folder, and lists the Maven coordinates you need to map to NuGet packages.
+
+Add one line to your Android library module's `build.gradle`:
+
+```groovy
+plugins {
+    alias(libs.plugins.android.library)
+}
+
+// Add this single line — it pulls in Microsoft's dependency info script
+apply from: 'https://raw.githubusercontent.com/xamarin/XamarinComponents/main/Util/AndroidGradleDependencyInfo.gradle'
+
+android {
+    // ... your existing config
+}
+
+dependencies {
+    implementation files('../libs/vendor-sdk.aar')
+    // ... your existing dependencies
+}
+```
+
+Then run the `xamarin` task:
 
 ```bash
-# Install jadx (Java decompiler)
+./gradlew :{ModuleName}:xamarin
+```
+
+This does three things automatically:
+1. **Builds** the release AAR (`bundleReleaseAar`)
+2. **Copies** all resolved AAR/JAR dependencies to a `xamarin/` folder (renamed with group IDs for clarity)
+3. **Prints** a complete list of all Maven artifacts with their group ID, artifact ID, and version
+
+**Example output:**
+
+```
+===================================================
+                    XAMARIN                        
+===================================================
+ Here is a list of local and maven artifact
+ dependencies in your project's module.
+
+DEPENDENCIES:  {GROUPID}:{ARTIFACTID} ({VERSION})
+
+Maven Artifact: androidx.core:core (1.12.0)
+Maven Artifact: com.google.code.gson:gson (2.10.1)
+Maven Artifact: com.squareup.okhttp3:okhttp (4.12.0)
+Maven Artifact: com.squareup.retrofit2:retrofit (2.9.0)
+Maven Artifact: org.jetbrains.kotlin:kotlin-stdlib (1.9.22)
+---------------------------------------------------
+Library Output: build/outputs/aar/VendorModule-release.aar
+                (This is probably what you want to bind)
+===================================================
+```
+
+> **📦 Source:** [xamarin/XamarinComponents — AndroidGradleDependencyInfo.gradle](https://github.com/xamarin/XamarinComponents/blob/main/Util/AndroidGradleDependencyInfo.gradle)
+
+**Alternative approaches (if you don't have a Gradle project):**
+
+**Option B — Use `jadx` to decompile and inspect the AAR:**
+
+```bash
 brew install jadx
-
-# Decompile the AAR to see what it imports
 jadx vendor-sdk.aar -d output/
-
-# Search for import statements to identify dependencies
 grep -r "^import " output/ | sort -u
 ```
 
-**Option B — Check the AAR's `pom.xml` or Gradle metadata:**
-
-If the SDK was distributed via Maven/Gradle, check its POM file for declared dependencies. If you have the Gradle project that uses the SDK:
-
-```bash
-./gradlew dependencies --configuration releaseRuntimeClasspath
-```
+**Option C — Check the POM file** if the SDK was distributed via Maven.
 
 **Map each dependency to its NuGet equivalent:**
 
