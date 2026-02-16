@@ -647,6 +647,30 @@ Once `dotnet build` succeeds with zero errors, your binding library is ready to 
 
 > **💡 Pro tip:** After a successful build, inspect `obj/Debug/net9.0-android/generated/src/` to review the final generated C# API surface. This is exactly what your MAUI app will call.
 
+### 🔍 Debugging & Inspection Tools
+
+**Inspecting AAR/JAR internals with [decompiler.com](https://www.decompiler.com/):**
+
+If you need to deep dive into what's inside an AAR or understand the Java class structure, you can use the online decompiler:
+
+1. Rename the `.aar` file to `.zip`
+2. Extract it — you'll find a `classes.jar` inside
+3. Upload `classes.jar` to [decompiler.com](https://www.decompiler.com/)
+4. Browse the full Java source definitions — see class hierarchies, method signatures, and interfaces
+
+This is invaluable when you need to understand what a method expects or when Metadata.xml errors reference obfuscated classes you can't easily identify.
+
+**Inspecting the generated DLL with JetBrains decompiler (dotPeek / Rider):**
+
+Once your Android binding project builds successfully, use **JetBrains dotPeek** (free standalone) or the built-in decompiler in **Rider/IntelliJ** to inspect the generated binding DLL:
+
+1. Open the binding project's output DLL (e.g., `bin/Debug/net9.0-android/AndroidVendorBindings.dll`)
+2. Browse the decompiled C# classes, methods, and namespaces
+3. Verify which SDK classes were bound correctly and which are missing
+4. Check that method signatures match what you expect from the Java source
+
+This helps you confirm that your `Metadata.xml` transformations produced the correct API surface before integrating into the MAUI app.
+
 ## 🔌 MAUI Integration
 
 Define a shared interface and implement per-platform:
