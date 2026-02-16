@@ -355,6 +355,8 @@ If it compiles, your iOS binding is ready to reference from the MAUI project.
 
 Android SDKs are distributed as **AAR** (Android Archive) or **JAR** files. Unlike iOS, you don't need to create a wrapper — .NET's binding generator can directly consume the AAR and auto-generate C# wrappers from the Java bytecode.
 
+**Why full SDK binding instead of a wrapper?** On Android, the binding generator handles Java/Kotlin code far more naturally than it handles Swift on iOS. By binding the entire SDK directly, you get access to the **complete API surface** without the overhead of maintaining a separate Java wrapper project. The trade-off is more `Metadata.xml` work upfront, but you avoid an extra build step and an extra layer of abstraction.
+
 Here's the full process from receiving an AAR to a working binding.
 
 ### Step 1: Create a .NET Android Binding Project
