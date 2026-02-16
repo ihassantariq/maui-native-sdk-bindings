@@ -404,6 +404,14 @@ This is where most people get stuck. The AAR depends on other libraries at runti
 
 **🔧 Recommended: Microsoft's Xamarin Gradle Dependency Tool**
 
+First, **create a minimal Android Library project** in Android Studio that references the vendor AAR. You don't need to write any code — this project exists solely to let Gradle resolve the SDK's dependency tree:
+
+1. Open **Android Studio → New Project → No Activity**
+2. Add a **New Module → Android Library**
+3. Place the vendor AAR in a `libs/` folder
+4. Add `implementation files('../libs/vendor-sdk.aar')` to the module's `build.gradle`
+5. Add any dependencies the SDK documentation says it requires
+
 Microsoft provides an official Gradle script that **automatically finds all dependencies**, copies them to a folder, and lists the Maven coordinates you need to map to NuGet packages.
 
 Add one line to your Android library module's `build.gradle`:
