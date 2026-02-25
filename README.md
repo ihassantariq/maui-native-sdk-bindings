@@ -412,7 +412,9 @@ First, **create a minimal Android Library project** in Android Studio that refer
 4. Add `implementation files('../libs/vendor-sdk.aar')` to the module's `build.gradle`
 5. Add any dependencies the SDK documentation says it requires
 
-Microsoft provides an official Gradle script that **automatically finds all dependencies**, copies them to a folder, and lists the Maven coordinates you need to map to NuGet packages.
+Microsoft provides an official Gradle script that **automatically finds all dependencies**, copies them to a folder, and lists the Maven coordinates you need to map to NuGet packages. I have also modified a bit for making it work with gradle 9.0. You can also use that one, if you have issues. See the sources below.
+
+https://gist.githubusercontent.com/ihassantariq/00a23cca84ab4e14b66209dbf96dff40/raw/bbe8975429fc231d06ba1438632ade994792fa90/MauiDependencies.gradle
 
 Add one line to your Android library module's `build.gradle`:
 
@@ -468,6 +470,7 @@ Library Output: build/outputs/aar/VendorModule-release.aar
 ```
 
 > **📦 Source:** [xamarin/XamarinComponents — AndroidGradleDependencyInfo.gradle](https://github.com/xamarin/XamarinComponents/blob/main/Util/AndroidGradleDependencyInfo.gradle)
+> **📦 Modified Gradle:** [MauiDependencies.gradle](https://gist.githubusercontent.com/ihassantariq/00a23cca84ab4e14b66209dbf96dff40/raw/bbe8975429fc231d06ba1438632ade994792fa90/MauiDependencies.gradle)
 
 
 **Map each dependency to its NuGet equivalent:**
