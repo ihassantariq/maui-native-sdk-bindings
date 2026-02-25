@@ -414,8 +414,6 @@ First, **create a minimal Android Library project** in Android Studio that refer
 
 Microsoft provides an official Gradle script that **automatically finds all dependencies**, copies them to a folder, and lists the Maven coordinates you need to map to NuGet packages. I have also modified a bit for making it work with gradle 9.0. You can also use that one, if you have issues. See the sources below.
 
-https://gist.githubusercontent.com/ihassantariq/00a23cca84ab4e14b66209dbf96dff40/raw/bbe8975429fc231d06ba1438632ade994792fa90/MauiDependencies.gradle
-
 Add one line to your Android library module's `build.gradle`:
 
 ```groovy
